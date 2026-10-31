@@ -1,0 +1,22 @@
+name: Equal-transmission phase-controls
+on:
+  push:
+    paths:
+      - 'research/phase-revivals/equal_transmission/**'
+      - '.github/workflows/equal-transmission-physics.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy scipy matplotlib
+      - name: Equal transmission and parity controls
+        working-directory: research/phase-revivals/equal_transmission
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: python -m unittest -v test_equal_transmission
