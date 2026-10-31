@@ -46,3 +46,22 @@ class EqualTransmissionTests(unittest.TestCase):
         self.assertLess(difference(.2),-.02)
 
 if __name__=='__main__':unittest.main()
+
+class BoundModeControlTests(unittest.TestCase):
+    def test_common_bound_free_initial_state(self):
+        from bound_state_control import remove_bound_modes
+        L=24;u,v=1.2,.35
+        Q,metadata=remove_bound_modes(L,2.5,u,v)
+        self.assertLess(np.linalg.norm(Q.conj().T@Q-np.eye(L//2)),1e-12)
+        for a,b in [(u,v),(v,u)]:
+            E,V=np.linalg.eigh(defect_h(L,a,b))
+            self.assertLess(np.linalg.norm(V[:,np.abs(E)>2].conj().T@Q),1e-12)
+        self.assertLess(metadata['common_control']['max_bound_occupation_after'],1e-22)
+
+    def test_bound_free_contrast_not_trivial_zero(self):
+        from bound_state_control import remove_bound_modes,capacity_from_orbitals
+        L=24;Q,_=remove_bound_modes(L,2.5,1.2,.35)
+        t=np.array([4.,8.,12.,14.])
+        ca=capacity_from_orbitals(L,Q,1.2,.35,t)
+        cb=capacity_from_orbitals(L,Q,.35,1.2,t)
+        self.assertGreater(np.max(abs(ca-cb)),1e-3)

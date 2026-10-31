@@ -1,0 +1,30 @@
+{
+  "model": "Open finite free-fermion hopping chain with two centered onsite potentials, initial staggered mass 2.5.",
+  "convention": "Discrete normalized Gaussian σ=2 on fixed interval to .75L/.76L, dt=0.05, prominence 0.08.",
+  "scattering": {
+    "complex_transmission_equal_under_swap": true,
+    "k_pi_over_2_T": 0.8165098287370636,
+    "k_pi_over_2_relative_reflection_phase_rad": -2.223731327884992
+  },
+  "unprojected_first_peak_shifts": {
+    "L48": -0.8892650634709653,
+    "L64": -0.5725642385618457,
+    "L80": -1.274810949170849
+  },
+  "common_bound_free_initial_peak_shifts": {
+    "L48": 1.3416798282665603,
+    "L64": 1.5457316379843817,
+    "L80": 1.8144243347722693
+  },
+  "original_bound_mode_occupancy_at_L48": {
+    "forward": 0.31441820975612156,
+    "reverse": 0.13090131242593547
+  },
+  "nonlinear_sign_crossover_at_L48_w0_775": {
+    "sigma1_5": 0.20760619833073213,
+    "sigma2": 0.17533286595827172,
+    "sigma2_5": 0.16728356910624634,
+    "sigma3": 0.14646727458042727
+  },
+  "caviar": "Both defect orientations are mirror-related. The bound-free control changes the initial state, which is no longer the original local staggered-mass ground state. The crossover is smoothing dependent. This is NOT a proven new phase-only physics law."
+}

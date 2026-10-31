@@ -86,3 +86,30 @@ Five regression tests cover equal complex transmission, scattering unitarity, pa
 Capizzi & Eisler, *SciPost Phys.* **14**, 070 (2023), https://doi.org/10.21468/SciPostPhys.14.4.070, already derive coherent reflected/transmitted quasiparticle revivals (their Sec. 3.4 and Eq. 64), emphasize sensitivity to reflection symmetry of the initial staggering (Appendix C), and explicitly identify momentum-dependent scattering as a challenging extension in their Discussion. We therefore **do not claim that coherent revivals, parity-sensitive interference, or phase dependence are new**. Capacity dynamics are also studied independently in the literature (e.g. harmonic chains: Phys. Rev. D 108, 125013 (2023)).
 
 The sign-reversal crossover might be scientifically informative if we can derive it from a **controlled, gauge-invariant path-phase interference expression**, validate its dependence on gap and chain size, separate any localized bound-state contributions, and compare directly with the published coherent-quasiparticle ansatz. To avoid a trivial mirror-equivalence result, a further experiment should seek **non-parity-related isotransmission defects** or an experimentally well-defined phase-controlled family. Until then, this is a solid proof-of-principle computational result, not a publication-ready discovery.
+
+## Additional control: localized bound-state occupation (essential caveat)
+
+The original strong defect and its reverse each support one localized eigenstate at `E=2.398747915786` (L48). Despite identical eigenvalues, this state has different spatial localization and initial occupied weight:
+
+| Orientation | Bound energy | Weight initially occupied | Left-half weight of bound eigenmode |
+|---|---:|---:|---:|
+| `(1.20,.35)` | 2.398748 | 0.314418 | 0.695570 |
+| `(.35,1.20)` | 2.398748 | 0.130901 | 0.304430 |
+
+Thus an inference that the observed revival contrast is caused *only* by continuum scattering phases is **not supported**. To test whether the phase-related contrast survives in the absence of occupied bound states, `bound_state_control.py` constructs a *single common initial occupied isometry* `Qp` for both orientations. Starting with the staggered-mass ground-state `Q`, take the two bound eigenvectors of `h_f(u,v)` and `h_f(v,u)`, span them with an orthonormal basis `B`, and set `Qp=polar[(I-BB†)Q]`. Both bound-state occupations are then zero to numerical precision, and **the identical Qp is used for both post-quench Hamiltonians**. The state is Gaussian and pure but no longer the local staggered-mass ground state.
+
+| L | Original peak difference | Common bound-free initial state's peak difference |
+|---:|---:|---:|
+| 48 | −0.889265 | +1.341680 |
+| 64 | −0.572564 | +1.545732 |
+| 80 | −1.274811 | +1.814424 |
+
+The contrast persists and reverses sign under this counterfactual preparation. **This does not imply that the difference is entirely due to scattering phase**, since projection also changes the continuum wavepacket content. It demonstrates that (i) changed bound-state occupation is an important confound, and (ii) a nonzero contrast can occur without initially occupied bound modes. At L48, the projection's minimum retained singular value is ≈0.644, so it is a substantial change of preparation rather than an infinitesimal control.
+
+## Smoother-dependence audit
+
+At L48 and mean potential `w=.775`, the numerical *nonzero* asymmetry crossover depends on Gaussian width: `σ=1.5: δ≈0.207606`, `σ=2: δ≈0.175333`, `σ=2.5: δ≈0.167284`, `σ=3: δ≈0.146467`. The crossing exists over these widths, but its position is not a universal critical parameter. These are floating-point numerical roots with grid spacing 0.05, not certified intervals.
+
+### Next theoretical priority
+
+Separate occupied bound-mode and continuum contributions to the Gaussian two-point function without destroying unitarity, and derive a gauge-invariant interference expression for the smoothed modular-capacity peak. Test this formula against the held-out three-defect families and chain lengths. As a stronger novelty control, seek non-parity-related *isotransmission* defects, since all swapped two-site-potential pairs are mirror-related by construction.
